@@ -35,7 +35,7 @@ public class ExerciseActivity extends AppCompatActivity implements ExerciseManag
     Context mContext;
     List mItemLoaded = new ArrayList();
     boolean mFlag;
-    public  final int DELAYTIME = 4000;
+    public  final int DELAYTIME = 2000;
     public  final int INCREMENTCOUNT = 7;
     ProgressDialog mProgressDialog;
 

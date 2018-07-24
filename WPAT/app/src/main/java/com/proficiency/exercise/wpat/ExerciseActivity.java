@@ -39,9 +39,20 @@ public class ExerciseActivity extends AppCompatActivity implements ExeciseView {
         switch (item.getItemId()) {
             case R.id.action_refresh:
 
-                showProgressDialog();
+                if (NetworkConnectivityManager.isNetworkAvailable(this)) {
+                    showProgressDialog();
+                    //delegating API call to presenter to get the list item from the server
+                    presenter.refresh();
 
-                presenter.refresh();
+                } else {
+                    //If internet is not there, it will show popup
+                    ExerciseAlertDialog.alertDilaog(this,
+                            mContext.getResources().getString(R.string.networkmessage));
+
+                    // asserting whether network connectivity is available ot not
+                    // it would cry/fail if we dont have network, so commenting it out
+                    //assertEquals(true, NetworkConnectivityManager.isNetworkAvailable(mContext));
+                }
                 break;
             default:
                 break;

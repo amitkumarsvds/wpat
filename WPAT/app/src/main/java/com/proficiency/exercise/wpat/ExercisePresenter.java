@@ -11,7 +11,6 @@ import adapters.ExerciseAdpter;
 import adapters.VerticalLineDecorator;
 import alert.ExerciseAlertDialog;
 import models.exercisemodels.Row;
-import services.networkmanager.NetworkConnectivityManager;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
@@ -140,17 +139,11 @@ public class ExercisePresenter implements ExerciseServiceCommunicator.OnServiceC
         assertEquals(0, mItemLoaded.size());
 
         //referesh the list item
-        mAdapter.notifyDataChanged();
-        //Before calling API first will check wheather internet is there or not
-        if (NetworkConnectivityManager.isNetworkAvailable(mContext))
-            interactWithService();
-        else {
-            ExerciseAlertDialog.alertDilaog(mContext,
-                    mContext.getResources().getString(R.string.networkmessage));
-
-            // asserting whether network connectivity is available ot not
-            assertEquals(true, NetworkConnectivityManager.isNetworkAvailable(mContext));
+        if (mAdapter != null) {
+            mAdapter.notifyDataChanged();
         }
+
+        interactWithService();
 
     }
 }

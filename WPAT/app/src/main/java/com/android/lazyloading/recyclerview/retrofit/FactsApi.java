@@ -1,4 +1,4 @@
-package retrofit;
+package com.android.lazyloading.recyclerview.retrofit;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

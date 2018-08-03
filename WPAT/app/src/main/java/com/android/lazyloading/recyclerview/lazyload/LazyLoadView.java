@@ -1,9 +1,9 @@
-package com.proficiency.exercise.wpat;
+package com.android.lazyloading.recyclerview.lazyload;
 
 /**
  * Interface Exerciseview
  */
-public interface ExeciseView {
+public interface LazyLoadView {
 
     void setUiElements();
 
@@ -14,4 +14,6 @@ public interface ExeciseView {
     void showProgressBar();
 
     void hideProgressBar();
+
+    void hideSwipeRefresh();
 }

@@ -1,4 +1,4 @@
-package adapters;
+package com.android.lazyloading.recyclerview.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,24 +8,24 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.lazyloading.recyclerview.R;
+import com.android.lazyloading.recyclerview.models.Row;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.proficiency.exercise.R;
 
 import java.util.List;
 
-import models.exercisemodels.Row;
 
 /**
  * Adapter class for list item
  */
-public class ExerciseAdpter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class LazyLoadAdpter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     static Context mContext;
     List<Row> mListRows;
     OnLoadMoreListener loadMoreListener;
     boolean isLoading = false, isMoreDataAvailable = true;
 
-    public ExerciseAdpter(Context mContext, List<Row> rows) {
+    public LazyLoadAdpter(Context mContext, List<Row> rows) {
         this.mContext = mContext;
         this.mListRows = rows;
     }
@@ -61,6 +61,39 @@ public class ExerciseAdpter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     /* VIEW HOLDERS class for caching*/
 
+    /**
+     * used to check if more data available
+     *
+     * @param moreDataAvailable
+     */
+    public void setMoreDataAvailable(boolean moreDataAvailable) {
+        isMoreDataAvailable = moreDataAvailable;
+    }
+
+    /* notifyDataSetChanged is final method so we can't override it
+         call adapter.notifyDataChanged(); after update the list
+         */
+    public final void notifyDataChanged() {
+        notifyDataSetChanged();
+        isLoading = false;
+    }
+
+    /**
+     * set load more  from activity
+     *
+     * @param loadMoreListener loadMoreListener
+     */
+    public void setLoadMoreListener(OnLoadMoreListener loadMoreListener) {
+        this.loadMoreListener = loadMoreListener;
+    }
+
+    /**
+     * interface for load more pagination
+     */
+    public interface OnLoadMoreListener {
+        void onLoadMore();
+    }
+
     static class ExerciseHolder extends RecyclerView.ViewHolder {
         TextView mTxtTitle;
         TextView mtxtdescription;
@@ -95,38 +128,5 @@ public class ExerciseAdpter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(mImgView);
         }
-    }
-
-    /**
-     * used to check if more data available
-     *
-     * @param moreDataAvailable
-     */
-    public void setMoreDataAvailable(boolean moreDataAvailable) {
-        isMoreDataAvailable = moreDataAvailable;
-    }
-
-    /* notifyDataSetChanged is final method so we can't override it
-         call adapter.notifyDataChanged(); after update the list
-         */
-    public final void notifyDataChanged() {
-        notifyDataSetChanged();
-        isLoading = false;
-    }
-
-    /**
-     * interface for load more pagination
-     */
-    public interface OnLoadMoreListener {
-        void onLoadMore();
-    }
-
-    /**
-     * set load more  from activity
-     *
-     * @param loadMoreListener loadMoreListener
-     */
-    public void setLoadMoreListener(OnLoadMoreListener loadMoreListener) {
-        this.loadMoreListener = loadMoreListener;
     }
 }

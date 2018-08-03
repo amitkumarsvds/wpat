@@ -1,4 +1,4 @@
-package com.proficiency.exercise;
+package com.android.lazyloading.recyclerview;
 
 import org.junit.Test;
 

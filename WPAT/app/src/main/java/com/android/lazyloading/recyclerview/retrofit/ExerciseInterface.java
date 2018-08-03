@@ -1,6 +1,8 @@
-package retrofit;
+package com.android.lazyloading.recyclerview.retrofit;
 
-import models.exercisemodels.Proficiency;
+
+import com.android.lazyloading.recyclerview.models.Proficiency;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 

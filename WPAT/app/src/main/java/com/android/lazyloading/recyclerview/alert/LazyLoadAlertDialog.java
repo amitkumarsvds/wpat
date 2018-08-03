@@ -1,17 +1,18 @@
-package alert;
+package com.android.lazyloading.recyclerview.alert;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
-import com.proficiency.exercise.R;
+import com.android.lazyloading.recyclerview.R;
+
 
 /**
  * Alert dialog class
  */
-public class ExerciseAlertDialog {
+public class LazyLoadAlertDialog {
 
-    public static void alertDilaog(Context context, String message){
+    public static void alertDilaog(Context context, String message) {
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(context);
         builder.setMessage(message)

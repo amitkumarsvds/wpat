@@ -1,64 +1,31 @@
-package com.proficiency.exercise.wpat;
+package com.android.lazyloading.recyclerview.lazyload;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.proficiency.exercise.R;
+import com.android.lazyloading.recyclerview.R;
+import com.android.lazyloading.recyclerview.alert.LazyLoadAlertDialog;
+import com.android.lazyloading.recyclerview.services.networkmanager.NetworkConnectivityManager;
 
-import alert.ExerciseAlertDialog;
-import services.networkmanager.NetworkConnectivityManager;
 
 /**
  * class which will show list of item
  */
-public class ExerciseActivity extends AppCompatActivity implements ExeciseView {
+public class LazyLoadActivity extends AppCompatActivity implements LazyLoadView {
 
     public RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private Context mContext;
     private ProgressDialog mProgressDialog;
-    private ExercisePresenter presenter;
+    private LazyLoadPresenter presenter;
+    private SwipeRefreshLayout swipeLayout;
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.mainmenu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_refresh:
-
-                if (NetworkConnectivityManager.isNetworkAvailable(this)) {
-                    showProgressDialog();
-                    //delegating API call to presenter to get the list item from the server
-                    presenter.refresh();
-
-                } else {
-                    //If internet is not there, it will show popup
-                    ExerciseAlertDialog.alertDilaog(this,
-                            mContext.getResources().getString(R.string.networkmessage));
-
-                    // asserting whether network connectivity is available ot not
-                    // it would cry/fail if we dont have network, so commenting it out
-                    //assertEquals(true, NetworkConnectivityManager.isNetworkAvailable(mContext));
-                }
-                break;
-            default:
-                break;
-        }
-        return true;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +36,7 @@ public class ExerciseActivity extends AppCompatActivity implements ExeciseView {
 
         setUiElements();
 
-        presenter = new ExercisePresenter(this, new ExerciseServiceCommunicator());
+        presenter = new LazyLoadPresenter(this, new LazyLoadViewServiceCommunicator());
 
         if (NetworkConnectivityManager.isNetworkAvailable(this)) {
             showProgressDialog();
@@ -77,9 +44,39 @@ public class ExerciseActivity extends AppCompatActivity implements ExeciseView {
             presenter.interactWithService();
         } else {
             //If internet is not there, it will show popup
-            ExerciseAlertDialog.alertDilaog(this,
+            LazyLoadAlertDialog.alertDilaog(this,
                     mContext.getResources().getString(R.string.networkmessage));
         }
+
+        // Adding  Swipe view Listener
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (NetworkConnectivityManager.isNetworkAvailable(LazyLoadActivity.this)) {
+                    //delegating API call to presenter to get the list item from the server
+                    presenter.refresh();
+
+                } else {
+                    hideSwipeRefresh();
+                    //If internet is not there, it will show popup
+                    LazyLoadAlertDialog.alertDilaog(LazyLoadActivity.this,
+                            mContext.getResources().getString(R.string.networkmessage));
+
+                    // asserting whether network connectivity is available ot not
+                    // it would cry/fail if we dont have network, so commenting it out
+                    //assertEquals(true, NetworkConnectivityManager.isNetworkAvailable(mContext));
+                }
+            }
+        });
+
+        // Scheme colors for animation
+        swipeLayout.setColorSchemeColors(
+                getResources().getColor(android.R.color.holo_blue_bright),
+                getResources().getColor(android.R.color.holo_green_light),
+                getResources().getColor(android.R.color.holo_orange_light),
+                getResources().getColor(android.R.color.holo_red_light)
+        );
+
     }
 
     /**
@@ -88,7 +85,9 @@ public class ExerciseActivity extends AppCompatActivity implements ExeciseView {
     @Override
     public void setUiElements() {
         mRecyclerView = findViewById(R.id.recycler_view);
-        mProgressBar = findViewById(R.id.progressBar1);
+        mProgressBar = findViewById(R.id.progress_bar);
+        swipeLayout = findViewById(R.id.swipe_refresh);
+
     }
 
     /**
@@ -130,6 +129,14 @@ public class ExerciseActivity extends AppCompatActivity implements ExeciseView {
 
         if (mProgressBar != null)
             mProgressBar.setVisibility(View.GONE);
+    }
+
+    /**
+     * hide swipe refresh view
+     */
+    @Override
+    public void hideSwipeRefresh() {
+        swipeLayout.setRefreshing(false);
     }
 
     /**

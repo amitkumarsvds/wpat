@@ -1,14 +1,17 @@
 /**
  * Class for service json model
  */
-package models.exercisemodels;
+package com.android.lazyloading.recyclerview.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Proficiency {
+public class Proficiency implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @SerializedName("title")
     @Expose
@@ -19,6 +22,7 @@ public class Proficiency {
 
     /**
      * get the title
+     *
      * @return title
      */
     public String getTitle() {
@@ -27,6 +31,7 @@ public class Proficiency {
 
     /**
      * set the title
+     *
      * @param title title
      */
     public void setTitle(String title) {
@@ -35,6 +40,7 @@ public class Proficiency {
 
     /**
      * get the rows
+     *
      * @return rows
      */
     public List<Row> getRows() {
@@ -43,6 +49,7 @@ public class Proficiency {
 
     /**
      * set the rows
+     *
      * @param rows rows
      */
     public void setRows(List<Row> rows) {

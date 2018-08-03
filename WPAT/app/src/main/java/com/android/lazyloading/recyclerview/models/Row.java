@@ -1,10 +1,13 @@
-
-package models.exercisemodels;
+package com.android.lazyloading.recyclerview.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Row {
+import java.io.Serializable;
+
+public class Row implements Serializable {
+
+    private static final long serialVersionUID = 2L;
 
     @SerializedName("title")
     @Expose
@@ -18,6 +21,7 @@ public class Row {
 
     /**
      * get the title
+     *
      * @return title
      */
     public String getTitle() {
@@ -26,6 +30,7 @@ public class Row {
 
     /**
      * set the title
+     *
      * @param title title
      */
     public void setTitle(String title) {
@@ -34,6 +39,7 @@ public class Row {
 
     /**
      * get the description
+     *
      * @return description
      */
     public String getDescription() {
@@ -42,6 +48,7 @@ public class Row {
 
     /**
      * set the description
+     *
      * @param description description
      */
     public void setDescription(String description) {
@@ -50,6 +57,7 @@ public class Row {
 
     /**
      * get the image Url
+     *
      * @return imageHref
      */
     public String getImageHref() {
@@ -58,6 +66,7 @@ public class Row {
 
     /**
      * set the image URL
+     *
      * @param imageHref imageHref
      */
     public void setImageHref(String imageHref) {

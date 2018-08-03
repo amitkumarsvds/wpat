@@ -1,19 +1,20 @@
-package com.proficiency.exercise.wpat;
+package com.android.lazyloading.recyclerview.lazyload;
 
+
+import com.android.lazyloading.recyclerview.models.Proficiency;
+import com.android.lazyloading.recyclerview.models.Row;
+import com.android.lazyloading.recyclerview.retrofit.ExerciseInterface;
+import com.android.lazyloading.recyclerview.retrofit.FactsApi;
 
 import java.util.List;
 
-import models.exercisemodels.Proficiency;
-import models.exercisemodels.Row;
-import retrofit.ExerciseInterface;
-import retrofit.FactsApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ExerciseServiceCommunicator {
+public class LazyLoadViewServiceCommunicator {
 
-    public static String mGetTitle;
+    private String mGetTitle;
 
     /**
      * api call to fetch facts from server through retrofit API communication

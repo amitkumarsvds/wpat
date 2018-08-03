@@ -1,36 +1,36 @@
-package com.proficiency.exercise.wpat;
+package com.android.lazyloading.recyclerview.lazyload;
 
 import android.support.v7.widget.LinearLayoutManager;
 
-import com.proficiency.exercise.R;
-
+import com.android.lazyloading.recyclerview.R;
+import com.android.lazyloading.recyclerview.adapters.LazyLoadAdpter;
+import com.android.lazyloading.recyclerview.adapters.VerticalLineDecorator;
+import com.android.lazyloading.recyclerview.alert.LazyLoadAlertDialog;
+import com.android.lazyloading.recyclerview.models.Row;
 import java.util.ArrayList;
 import java.util.List;
-
-import adapters.ExerciseAdpter;
-import adapters.VerticalLineDecorator;
-import alert.ExerciseAlertDialog;
-import models.exercisemodels.Row;
-
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
 
-public class ExercisePresenter implements ExerciseServiceCommunicator.OnServiceCallFinishedListener {
+/**
+ *  presenter class for lazyload
+ */
+public class LazyLoadPresenter implements LazyLoadViewServiceCommunicator.OnServiceCallFinishedListener {
 
     private final int DELAYTIME = 2000;
     private final int INCREMENTCOUNT = 7;
-    private ExeciseView mExeciseView;
-    private ExerciseServiceCommunicator mExerciseServiceCommunicator;
+    private LazyLoadView mExeciseView;
+    private LazyLoadViewServiceCommunicator mLazyLoadViewServiceCommunicator;
     private List mItemLoaded = new ArrayList();
     private boolean mFlag;
-    private ExerciseAdpter mAdapter;
-    private ExerciseActivity mContext;
+    private LazyLoadAdpter mAdapter;
+    private LazyLoadActivity mContext;
 
 
-    ExercisePresenter(ExeciseView execiseView, ExerciseServiceCommunicator exerciseServiceCommunicator) {
+    LazyLoadPresenter(LazyLoadView execiseView, LazyLoadViewServiceCommunicator lazyLoadViewServiceCommunicator) {
         this.mExeciseView = execiseView;
-        this.mExerciseServiceCommunicator = exerciseServiceCommunicator;
-        mContext = ((ExerciseActivity) mExeciseView);
+        this.mLazyLoadViewServiceCommunicator = lazyLoadViewServiceCommunicator;
+        mContext = ((LazyLoadActivity) mExeciseView);
 
     }
 
@@ -45,7 +45,7 @@ public class ExercisePresenter implements ExerciseServiceCommunicator.OnServiceC
      * releasing view (exercise activity context)
      */
     void interactWithService() {
-        mExerciseServiceCommunicator.serviceFacts(this);
+        mLazyLoadViewServiceCommunicator.serviceFacts(this);
     }
 
     /**
@@ -65,8 +65,8 @@ public class ExercisePresenter implements ExerciseServiceCommunicator.OnServiceC
             for (int i = 0; i <= INCREMENTCOUNT; i++) {
                 mItemLoaded.add(respRows.get(i));
             }
-            mAdapter = new ExerciseAdpter((ExerciseActivity) mExeciseView, mItemLoaded);
-            mAdapter.setLoadMoreListener(new ExerciseAdpter.OnLoadMoreListener() {
+            mAdapter = new LazyLoadAdpter((LazyLoadActivity) mExeciseView, mItemLoaded);
+            mAdapter.setLoadMoreListener(new LazyLoadAdpter.OnLoadMoreListener() {
                 @Override
                 public void onLoadMore() {
 
@@ -117,6 +117,8 @@ public class ExercisePresenter implements ExerciseServiceCommunicator.OnServiceC
 
         mExeciseView.dismissProgressDialog();
 
+        mExeciseView.hideSwipeRefresh();
+
         updateUI(respRows, title);
     }
 
@@ -126,7 +128,9 @@ public class ExercisePresenter implements ExerciseServiceCommunicator.OnServiceC
         // asserts failure response string is empty or not
         assertNotSame(failureData, "");
 
-        ExerciseAlertDialog.alertDilaog((ExerciseActivity) mExeciseView, failureData);
+        mExeciseView.hideSwipeRefresh();
+
+        LazyLoadAlertDialog.alertDilaog((LazyLoadActivity) mExeciseView, failureData);
 
     }
 

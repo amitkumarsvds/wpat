@@ -1,13 +1,13 @@
-package com.proficiency.exercise;
+package com.android.lazyloading.recyclerview;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.android.lazyloading.recyclerview.services.networkmanager.NetworkConnectivityManager;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import services.networkmanager.NetworkConnectivityManager;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -23,7 +23,7 @@ public class ProficiencyInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.proficiency.exercise", appContext.getPackageName());
+        assertEquals("com.android.lazyloading.recyclerview", appContext.getPackageName());
 
         assertEquals(true, NetworkConnectivityManager.isNetworkAvailable(appContext));
 

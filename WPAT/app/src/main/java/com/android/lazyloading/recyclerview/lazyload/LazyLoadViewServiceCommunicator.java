@@ -40,7 +40,7 @@ public class LazyLoadViewServiceCommunicator {
             @Override
             public void onFailure(Call<Proficiency> call, Throwable t) {
 
-                listener.onFailure("Invalid Response..!");
+                listener.onFailure("Invalid Response.. Please try after sometime!");
 
             }
         });

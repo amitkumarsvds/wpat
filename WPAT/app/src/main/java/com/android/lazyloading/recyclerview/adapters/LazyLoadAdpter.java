@@ -12,6 +12,7 @@ import com.android.lazyloading.recyclerview.R;
 import com.android.lazyloading.recyclerview.models.Row;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -120,12 +121,15 @@ public class LazyLoadAdpter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 mtxtdescription.setText(rows.get(position).getDescription());
             }
 
+            RequestOptions requestOptions = new RequestOptions();
+            requestOptions.circleCrop();
+            requestOptions.placeholder(R.drawable.no_image_icon);
+            requestOptions.error(R.drawable.no_image_icon);
+
             String imgUrl = rows.get(position).getImageHref();
             //Glide lib for image
             Glide.with(mContext).load(imgUrl)
-                    .placeholder(R.drawable.no_image_icon)
-                    .fitCenter()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .apply( requestOptions)
                     .into(mImgView);
         }
     }

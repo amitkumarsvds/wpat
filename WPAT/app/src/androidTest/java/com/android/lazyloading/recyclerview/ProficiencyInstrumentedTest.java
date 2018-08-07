@@ -23,8 +23,15 @@ public class ProficiencyInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
+        /* checking package is same as mentioned in manifest (com.android.lazyloading.recyclerview)*/
         assertEquals("com.android.lazyloading.recyclerview", appContext.getPackageName());
 
+        /* checking app name is same as mentioned in manifest (Lazy View)*/
+        assertEquals("Lazy View", appContext.getResources().getString(R.string.app_name));
+
+        /* checking network connectivity
+        passes/succeeds     if network is available
+        fails/cries         if there is no network */
         assertEquals(true, NetworkConnectivityManager.isNetworkAvailable(appContext));
 
     }

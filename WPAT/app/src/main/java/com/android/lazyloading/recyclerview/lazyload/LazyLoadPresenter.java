@@ -7,13 +7,15 @@ import com.android.lazyloading.recyclerview.adapters.LazyLoadAdpter;
 import com.android.lazyloading.recyclerview.adapters.VerticalLineDecorator;
 import com.android.lazyloading.recyclerview.alert.LazyLoadAlertDialog;
 import com.android.lazyloading.recyclerview.models.Row;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
 
 /**
- *  presenter class for lazyload
+ * presenter class for lazyload
  */
 public class LazyLoadPresenter implements LazyLoadViewServiceCommunicator.OnServiceCallFinishedListener {
 
@@ -115,9 +117,11 @@ public class LazyLoadPresenter implements LazyLoadViewServiceCommunicator.OnServ
 
         mFlag = false;
 
-        mExeciseView.dismissProgressDialog();
+        if (mExeciseView != null) {
+            mExeciseView.hideSwipeRefresh();
 
-        mExeciseView.hideSwipeRefresh();
+            mExeciseView.dismissProgressDialog();
+        }
 
         updateUI(respRows, title);
     }
@@ -128,9 +132,14 @@ public class LazyLoadPresenter implements LazyLoadViewServiceCommunicator.OnServ
         // asserts failure response string is empty or not
         assertNotSame(failureData, "");
 
-        mExeciseView.hideSwipeRefresh();
+        if (mExeciseView != null) {
+            mExeciseView.hideSwipeRefresh();
 
-        LazyLoadAlertDialog.alertDilaog((LazyLoadActivity) mExeciseView, failureData);
+            mExeciseView.dismissProgressDialog();
+
+            LazyLoadAlertDialog.alertDilaog((LazyLoadActivity) mExeciseView, failureData);
+        }
+
 
     }
 

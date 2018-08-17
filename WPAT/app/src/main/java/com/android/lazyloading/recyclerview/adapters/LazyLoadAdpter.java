@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.android.lazyloading.recyclerview.R;
 import com.android.lazyloading.recyclerview.models.Row;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
@@ -21,10 +20,10 @@ import java.util.List;
  * Adapter class for list item
  */
 public class LazyLoadAdpter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    static Context mContext;
-    List<Row> mListRows;
-    OnLoadMoreListener loadMoreListener;
-    boolean isLoading = false, isMoreDataAvailable = true;
+    private OnLoadMoreListener loadMoreListener;
+    private boolean isLoading = false, isMoreDataAvailable = true;
+    private Context mContext;
+    private List<Row> mListRows;
 
     public LazyLoadAdpter(Context mContext, List<Row> rows) {
         this.mContext = mContext;
@@ -95,7 +94,7 @@ public class LazyLoadAdpter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         void onLoadMore();
     }
 
-    static class ExerciseHolder extends RecyclerView.ViewHolder {
+    private class ExerciseHolder extends RecyclerView.ViewHolder {
         TextView mTxtTitle;
         TextView mtxtdescription;
         ImageView mImgView;
@@ -127,9 +126,9 @@ public class LazyLoadAdpter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             requestOptions.error(R.drawable.no_image_icon);
 
             String imgUrl = rows.get(position).getImageHref();
-            //Glide lib for image
+            //Glide lib for image loading
             Glide.with(mContext).load(imgUrl)
-                    .apply( requestOptions)
+                    .apply(requestOptions)
                     .into(mImgView);
         }
     }

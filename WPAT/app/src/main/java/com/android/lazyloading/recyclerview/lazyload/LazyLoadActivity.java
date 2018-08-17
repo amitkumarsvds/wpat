@@ -9,17 +9,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.android.lazyloading.recyclerview.services.networkmanager.LazyLoadApplication;
+import com.android.lazyloading.recyclerview.services.networkmanager.ConnectionListener;
 import com.android.lazyloading.recyclerview.R;
 import com.android.lazyloading.recyclerview.alert.LazyLoadAlertDialog;
-import com.android.lazyloading.recyclerview.services.networkmanager.NetworkConnectivityManager;
 
 
 /**
  * class which will show list of item
  */
-public class LazyLoadActivity extends AppCompatActivity implements LazyLoadView {
+public class LazyLoadActivity extends AppCompatActivity implements LazyLoadView, ConnectionListener {
 
-    public RecyclerView mRecyclerView;
+    protected RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private Context mContext;
     private ProgressDialog mProgressDialog;
@@ -36,36 +37,20 @@ public class LazyLoadActivity extends AppCompatActivity implements LazyLoadView 
 
         setUiElements();
 
+        ((LazyLoadApplication) getApplication()).setInternetConnectionListener(this);
+
         presenter = new LazyLoadPresenter(this, new LazyLoadViewServiceCommunicator());
 
-        if (NetworkConnectivityManager.isNetworkAvailable(this)) {
-            showProgressDialog();
-            //delegating API call to presenter to get the list item from the server
-            presenter.interactWithService();
-        } else {
-            //If internet is not there, it will show popup
-            LazyLoadAlertDialog.alertDilaog(this,
-                    mContext.getResources().getString(R.string.networkmessage));
-        }
+        showProgressDialog();
+        //delegating API call to presenter to get the list item from the server
+        presenter.interactWithService((LazyLoadApplication) getApplication());
 
         // Adding  Swipe view Listener
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (NetworkConnectivityManager.isNetworkAvailable(LazyLoadActivity.this)) {
-                    //delegating API call to presenter to get the list item from the server
-                    presenter.refresh();
-
-                } else {
-                    hideSwipeRefresh();
-                    //If internet is not there, it will show popup
-                    LazyLoadAlertDialog.alertDilaog(LazyLoadActivity.this,
-                            mContext.getResources().getString(R.string.networkmessage));
-
-                    // asserting whether network connectivity is available ot not
-                    // it would cry/fail if we dont have network, so commenting it out
-                    //assertEquals(true, NetworkConnectivityManager.isNetworkAvailable(mContext));
-                }
+                //delegating API call to presenter to get the list item from the server
+                presenter.refresh();
             }
         });
 
@@ -87,7 +72,6 @@ public class LazyLoadActivity extends AppCompatActivity implements LazyLoadView 
         mRecyclerView = findViewById(R.id.recycler_view);
         mProgressBar = findViewById(R.id.progress_bar);
         swipeLayout = findViewById(R.id.swipe_refresh);
-
     }
 
     /**
@@ -147,5 +131,44 @@ public class LazyLoadActivity extends AppCompatActivity implements LazyLoadView 
         presenter.onDestroy();
         super.onDestroy();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ((LazyLoadApplication) getApplication()).setInternetConnectionListener(this);
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ((LazyLoadApplication) getApplication()).removeInternetConnectionListener();
+    }
+
+
+    @Override
+    public void onInternetUnavailable() {
+        hideSwipeRefresh();
+
+        dismissProgressDialog();
+
+    }
+
+    @Override
+    public void onCacheUnavailable() {
+
+        // blank on first time offline else cached of previous-online-data
+        hideSwipeRefresh();
+
+        dismissProgressDialog();
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LazyLoadAlertDialog.alertDilaog(LazyLoadActivity.this,
+                        mContext.getResources().getString(R.string.networkmessage));
+            }
+        });
     }
 }

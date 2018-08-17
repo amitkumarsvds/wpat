@@ -1,6 +1,8 @@
 package com.android.lazyloading.recyclerview.lazyload;
 
+import android.app.Application;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 
 import com.android.lazyloading.recyclerview.R;
 import com.android.lazyloading.recyclerview.adapters.LazyLoadAdpter;
@@ -11,7 +13,6 @@ import com.android.lazyloading.recyclerview.models.Row;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
 
 /**
@@ -27,6 +28,7 @@ public class LazyLoadPresenter implements LazyLoadViewServiceCommunicator.OnServ
     private boolean mFlag;
     private LazyLoadAdpter mAdapter;
     private LazyLoadActivity mContext;
+    private Application app;
 
 
     LazyLoadPresenter(LazyLoadView execiseView, LazyLoadViewServiceCommunicator lazyLoadViewServiceCommunicator) {
@@ -45,9 +47,12 @@ public class LazyLoadPresenter implements LazyLoadViewServiceCommunicator.OnServ
 
     /**
      * releasing view (exercise activity context)
+     *
+     * @param application
      */
-    void interactWithService() {
-        mLazyLoadViewServiceCommunicator.serviceFacts(this);
+    void interactWithService(Application application) {
+        this.app = application;
+        mLazyLoadViewServiceCommunicator.serviceFacts(application, this);
     }
 
     /**
@@ -149,14 +154,15 @@ public class LazyLoadPresenter implements LazyLoadViewServiceCommunicator.OnServ
         mItemLoaded.clear();//clearing old data from list
 
         //asserting to verify size is 0 or not post clearing it - refer previous line
-        assertEquals(0, mItemLoaded.size());
+        //     assertEquals(0, mItemLoaded.size());
 
         //referesh the list item
         if (mAdapter != null) {
             mAdapter.notifyDataChanged();
         }
 
-        interactWithService();
+        Log.d("refresh", "refresh");
+        interactWithService(app);
 
     }
 }

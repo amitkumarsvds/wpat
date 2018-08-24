@@ -9,10 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.android.lazyloading.recyclerview.services.networkmanager.LazyLoadApplication;
-import com.android.lazyloading.recyclerview.services.networkmanager.ConnectionListener;
 import com.android.lazyloading.recyclerview.R;
 import com.android.lazyloading.recyclerview.alert.LazyLoadAlertDialog;
+import com.android.lazyloading.recyclerview.services.networkmanager.ConnectionListener;
+import com.android.lazyloading.recyclerview.services.networkmanager.LazyLoadApplication;
 
 
 /**
@@ -26,7 +26,6 @@ public class LazyLoadActivity extends AppCompatActivity implements LazyLoadView,
     private ProgressDialog mProgressDialog;
     private LazyLoadPresenter presenter;
     private SwipeRefreshLayout swipeLayout;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +53,6 @@ public class LazyLoadActivity extends AppCompatActivity implements LazyLoadView,
             }
         });
 
-        // Scheme colors for animation
-        swipeLayout.setColorSchemeColors(
-                getResources().getColor(android.R.color.holo_blue_bright),
-                getResources().getColor(android.R.color.holo_green_light),
-                getResources().getColor(android.R.color.holo_orange_light),
-                getResources().getColor(android.R.color.holo_red_light)
-        );
-
     }
 
     /**
@@ -72,6 +63,13 @@ public class LazyLoadActivity extends AppCompatActivity implements LazyLoadView,
         mRecyclerView = findViewById(R.id.recycler_view);
         mProgressBar = findViewById(R.id.progress_bar);
         swipeLayout = findViewById(R.id.swipe_refresh);
+        // Scheme colors for animation
+        swipeLayout.setColorSchemeColors(
+                getResources().getColor(android.R.color.holo_blue_bright),
+                getResources().getColor(android.R.color.holo_green_light),
+                getResources().getColor(android.R.color.holo_orange_light),
+                getResources().getColor(android.R.color.holo_red_light)
+        );
     }
 
     /**

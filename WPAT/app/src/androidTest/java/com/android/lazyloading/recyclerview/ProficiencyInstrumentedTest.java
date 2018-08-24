@@ -2,22 +2,12 @@ package com.android.lazyloading.recyclerview;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.Espresso;
-import android.support.test.espresso.action.ViewActions;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
-import android.view.View;
-
-import com.android.lazyloading.recyclerview.lazyload.LazyLoadActivity;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -40,7 +30,7 @@ public class ProficiencyInstrumentedTest {
         /* checking network connectivity
         passes/succeeds     if network is available
         fails/cries         if there is no network */
-       // assertEquals(true, NetworkConnectivityManager.isNetworkAvailable(appContext));
+        // assertEquals(true, NetworkConnectivityManager.isNetworkAvailable(appContext));
 
     }
 
